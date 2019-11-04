@@ -1,54 +1,81 @@
-#include <iostream>
 #include <cstdlib>
 #include <cstring>
+#include <iostream>
 
 template <typename T>
-class ResizableArray
-{
-    T *list;
-    int capacity; // Declared size
-    int size;     // Number of items
+class ResizableArray {
+    T *list;       // The array
+    int capacity;  // Declared size
+    int size;      // Number of items
 
-public:
-    ResizableArray(int capacity) : capacity(capacity), size(0)
-    {
+    // Shrink test
+    bool canShrink() { return (float)size / capacity <= 0.3; }
+
+    // Expand test
+    bool mustExpand() { return (float)size / capacity >= 0.8; }
+
+    // Shrink op
+    void shrink() { move(capacity / 2); }
+
+    // Expand op
+    void expand() { move(capacity * 2); }
+
+    // Create new list, populate new list, and replace existing list
+    void move(int newCap) {
+        T *newList = (T *)calloc(1, newCap * sizeof(T));
+        memcpy(newList, list, size * sizeof(T));
+        free(list);
+        list = newList;
+        capacity = newCap;
+    }
+
+   public:
+    // Constructor
+    ResizableArray(int capacity) : capacity(capacity), size(0) {
         this->list = (T *)calloc(1, capacity * sizeof(T));
     }
 
-    void put(T data)
-    {
+    // Insert
+    void put(T data) {
         list[size++] = data;
+        if (mustExpand()) {
+            expand();
+        }
     }
 
-    T get(int index)
-    {
-        if (size == 0)
-        {
+    // Get item at index
+    T get(int index) {
+        if (size == 0) {
             throw "List is empty.";
         }
 
-        if (size <= index)
-        {
+        if (index < 0 || index >= size) {
             throw "Index out of bounds!";
         }
 
         return list[index];
     }
 
-    T remove(int index)
-    {
+    // Get item and remove it from list
+    T remove(int index) {
         T current = get(index);
         --size;
+        if (canShrink()) {
+            shrink();
+        }
         return current;
     }
 
-    int getSize()
-    {
-        return size;
-    }
+    // Pop (like a stack)
+    T pop() { return remove(size - 1); }
 
-    ~ResizableArray()
-    {
+    // Size getter
+    int getSize() { return size; }
+
+    bool empty() { return size == 0; }
+
+    // Destructor
+    ~ResizableArray() {
         free(this->list);
         this->list = NULL;
         this->capacity = 0;

@@ -6,3 +6,6 @@
 
 # Precompiled files
 *.gch
+
+# Dumped core
+*.stackdump
