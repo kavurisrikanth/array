@@ -7,4 +7,4 @@ array: headers.o
 headers.o: headers.hh
 
 clean:
-	rm array *.o
+	rm array *.o *.gch
