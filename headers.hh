@@ -1,6 +1,8 @@
 #include <cstdlib>
 #include <cstring>
-#include <iostream>
+
+#include "IndexOutOfBoundsException.hh"
+#include "UnderflowException.hh"
 
 template <typename T>
 class ResizableArray {
@@ -46,11 +48,11 @@ class ResizableArray {
     // Get item at index
     T get(int index) {
         if (size == 0) {
-            throw "List is empty.";
+            throw UnderflowException("List is empty.");
         }
 
         if (index < 0 || index >= size) {
-            throw "Index out of bounds!";
+            throw IndexOutOfBoundsException(index);
         }
 
         return list[index];

@@ -9,3 +9,6 @@
 
 # Dumped core
 *.stackdump
+
+# Visual Studio Code settings
+.vscode

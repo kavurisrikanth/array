@@ -2,6 +2,7 @@
 
 #include "headers.hh"
 #include <cassert>
+#include <iostream>
 
 void test();
 void testPushAndPop();
@@ -22,8 +23,10 @@ void testPopOnEmptyList() {
     assert(arr.getSize() == 0);
     try {
         arr.pop();
-    } catch (const char* s) {
-        assert(strcmp(s, "List is empty.") == 0);
+    } catch (IndexOutOfBoundsException e) {
+        assert(strcmp(e.what(), "Index out of bounds: -1") == 0);
+    } catch (UnderflowException e) {
+        assert(strcmp(e.what(), "List is empty.") == 0);
     }
 }
 
